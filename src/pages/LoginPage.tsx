@@ -1,24 +1,21 @@
-import { useEffect, useLayoutEffect } from "react";
+import { useContext, useEffect, useLayoutEffect } from "react";
 import { Container } from "react-bootstrap";
-import { NavLink, Routes, useNavigate } from "react-router-dom";
+// import { NavLink, Routes, useNavigate } from "react-router-dom";
 import LoginTab from "../components/login";
 import { INavbar } from "../components/navbar";
-import { useUser } from "../context/auth";
-// import s from "./LoginPage.css" ;
-// import "./LoginPage.css";
-import "./LoginPage.css";
+
+import { AuthContext } from "../hooks/authContext";
 
 export const LoginPage = ():React.ReactElement => {
-  // const {authState} = useUser();
-  const {}
-  const nav = useNavigate()
+  const {state} = useContext(AuthContext);
+  // const nav = useNavigate()
   
-  useLayoutEffect(()=>{
-    if (authState){
-      console.log("redirect from login page")
-      return nav('/');
-    }
-  },[authState,nav]);
+  // useLayoutEffect(()=>{
+  //   if (authState){
+  //     console.log("redirect from login page")
+  //     return nav('/');
+  //   }
+  // },[authState,nav]);
   
   // if(authState ){
     
@@ -30,7 +27,7 @@ export const LoginPage = ():React.ReactElement => {
     <>
       <INavbar />
       <Container className="bg-light mg-5" >
-        <LoginTab className="form-group" authState={authState}  />
+        <LoginTab className="form-group" authState={state.loading}  />
       </Container>
     </>
       

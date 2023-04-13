@@ -1,13 +1,14 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { AuthContext } from '../hooks/authContext';
+import { loginUser } from '../utils/api';
 
 
 
 
 type LoginProps = {
     className?: string;
-    // submitFunction: () => void;
     authState:boolean;
 }
 
@@ -20,10 +21,23 @@ export default function LoginTab(props:LoginProps):ReactElement {
     const [loginInfo, setLoginInfo] = useState(emptyLogin);
     const [loginDisable, setLoginDisable] = useState(false)
 
+    const {state,dispatch} = useContext(AuthContext)
+    
+    // useEffect(() => {
+    //     console.log(state.name);
+    // },[state.loading])
 
-    const submitHandler = (e:React.FormEvent<HTMLFormElement>) =>{
+    const submitHandler = async(e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
-        setLoginInfo(emptyLogin);
+        try {
+            const data = await loginUser(loginInfo.userName,loginInfo.password);
+            if (data){
+                dispatch({type:"LOGIN_SUCCESS",payload:data.user})
+                setLoginInfo(emptyLogin);
+            }
+        } catch(err) {
+            dispatch({type:"LOGIN_FAILURE",payload:{message:"login failed"}})
+        }
         setTimeout(()=>{
             setLoginDisable(false);
         },3000)
@@ -52,11 +66,11 @@ export default function LoginTab(props:LoginProps):ReactElement {
                     name="userName" />
             </Form.Group>   
 
-            <p id='divi'></p>
+            {/* <p id='divi'></p> */}
             <Form.Group className={props.className} >
                 <Form.Label className='loginLabel' > Password </Form.Label>
                     <Form.Control className={props.className}
-                        placeholder="default password: 1234" 
+                        placeholder="default password: 123456" 
                         type="password"
                         value = {loginInfo.password} 
                         onChange={handleValue}

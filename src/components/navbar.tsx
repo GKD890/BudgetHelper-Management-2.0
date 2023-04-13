@@ -1,36 +1,25 @@
 import axios from "axios";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Button, Container, Nav, Navbar, NavDropdown, NavItem } from "react-bootstrap";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
-import { useNavigate } from "react-router-dom";
-import { useUser } from "../context/auth";
 import gitIcon from "../media/GitHub-Mark-64px.png"
-import { logoutUrl } from "../utils/constants";
+import { AuthContext } from "../hooks/authContext";
+import { logoutUser } from "../utils/api";
+// import { useLogout } from "../hooks/useAuth";
 
 
 export function INavbar(){
     const [messageClick, setMessageClick] = useState(false);
-    const nav = useNavigate();
-    const {
-        name,
-        avatar,
-        authState,
-        logOut} = useUser();
+    // const nav = useNavigate();
+    const {dispatch} = useContext(AuthContext);
 
     const clickMessage = () =>{setMessageClick(!messageClick);}
 
     const logoutEvent = async (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
         try{
-            const {data,status} = await axios.post(logoutUrl,{
-                headers: {
-                    "Access-Control-Allow-Origin": "*",                  
-                }
-            }
-            );
-            console.log(`${status}: logout user ${data} `)
-            logOut();
-            return data;
+            const data  = await logoutUser();
+            dispatch({type:"LOGOUT"})
         } catch(error){ console.log(error)}
         
         // nav("/");
@@ -53,10 +42,11 @@ export function INavbar(){
                         Record
                     </Nav.Link> 
 
-                    {authState?
+                    {/* {authState? */}
                     (
                         <>
-                        <NavDropdown title={name} className="me-3">
+                        <NavDropdown title="temp"className="me-3">  
+                        {/* todo: change the title */}
                             <Nav.Item className="w-100 p-2">
                                     <form onSubmit={logoutEvent}>
                                         <Button className='sm-loginButtion' variant="outline-danger" type="submit" >
@@ -80,7 +70,7 @@ export function INavbar(){
                                 Login
                             </Button> 
                         </Nav.Link>
-                    }
+                    {/* } */}
                        
                     <Nav.Link href="https://github.com/GKD890/BudgetHelper-Management"  style={{position:"relative"}}>
                         <i className="bi bi-github"></i>

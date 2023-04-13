@@ -7,7 +7,6 @@ import { Col, Container, Row } from 'react-bootstrap'
 import background from './assets/bg-unsplash.jpg'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <div className='w-100 h-100 .bg-indigo.bg-accent-4'>
