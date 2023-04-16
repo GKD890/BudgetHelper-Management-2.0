@@ -5,20 +5,20 @@ import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import gitIcon from "../media/GitHub-Mark-64px.png"
 import { AuthContext } from "../hooks/authContext";
 import { logoutUser } from "../utils/api";
-// import { useLogout } from "../hooks/useAuth";
+import { Github } from "react-bootstrap-icons";
 
 
 export function INavbar(){
     const [messageClick, setMessageClick] = useState(false);
     // const nav = useNavigate();
-    const {dispatch} = useContext(AuthContext);
+    const {state,dispatch} = useContext(AuthContext);
 
     const clickMessage = () =>{setMessageClick(!messageClick);}
 
     const logoutEvent = async (e:React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
         try{
-            const data  = await logoutUser();
+            await logoutUser();
             dispatch({type:"LOGOUT"})
         } catch(error){ console.log(error)}
         
@@ -42,7 +42,7 @@ export function INavbar(){
                         Record
                     </Nav.Link> 
 
-                    {/* {authState? */}
+                    {state.name?
                     (
                         <>
                         <NavDropdown title="temp"className="me-3">  
@@ -70,10 +70,11 @@ export function INavbar(){
                                 Login
                             </Button> 
                         </Nav.Link>
-                    {/* } */}
+                    } 
                        
-                    <Nav.Link href="https://github.com/GKD890/BudgetHelper-Management"  style={{position:"relative"}}>
-                        <i className="bi bi-github"></i>
+                    <Nav.Link href="https://github.com/GKD890/BudgetHelper-Management" >
+                    {/* <Nav.Link href="https://github.com/GKD890/BudgetHelper-Management"  style={{position:"relative"}}> */}
+                    <Github size={28} />
                     </Nav.Link>
                       
                     
